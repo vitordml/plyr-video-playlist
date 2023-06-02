@@ -352,7 +352,7 @@ body {
 }
 
 
-.plyr__control.plyr__control--overlaid:after {
+.player_container .plyr__control.plyr__control--overlaid:after {
   content: "";
   width: 122%;
   height: 122%;
@@ -368,7 +368,7 @@ body {
   pointer-events: none;
   display:none
 }
-.plyr__control.plyr__control--overlaid.active:after {
+.player_container.loading .plyr__control.plyr__control--overlaid:after {
   display: block;
 }
 @keyframes spin {

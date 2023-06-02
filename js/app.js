@@ -5,9 +5,16 @@ const PlayerApp = {
   tracks: [],
   player: null,
 
+
+  /**
+   * Initializes the player application.
+   */
   initialize() {
+    // Get the DOM element
     this.playlist = document.getElementById('playlist');
     this.playerContainer = document.getElementById('player_container');
+
+    // prepare objects
     this.createPlayer();
     this.initializePlaylistItems();
     this.populateAccordionContent();
@@ -21,8 +28,13 @@ const PlayerApp = {
     this.selectFirstVisibleItem();
   },
 
+
+  /**
+   * Creates the Plyr player with the specified controls.
+   */
   createPlayer() {
     const controls = `
+    <!-- Player controls HTML -->
     <button type="button" class="plyr__control plyr__control--overlaid" data-plyr="play">
         <svg aria-hidden="true" focusable="false">
           <use xlink:href="#plyr-play"></use>
@@ -101,11 +113,14 @@ const PlayerApp = {
       </div>
     `;
 
+    /**
+     * Initializes the playlist items by extracting data from the DOM.
+     */
     this.player = new Plyr('.js-playerx', {
       // Plyr options
       controls: controls,
       loadSprite: true,
-      debug:true,
+      debug: false,
       keyboard: {
         focused: true,
         global: true
@@ -143,16 +158,24 @@ const PlayerApp = {
 
   },
 
+  /**
+   * Initializes the playlist items by extracting data from the DOM.
+   */
   initializePlaylistItems() {
     this.playlistItems = Array.from(this.playlist.getElementsByClassName('playlist_item'));
     this.tracks = this.playlistItems.map(item => this.createTrackFromPlaylistItem(item));
-  
+
     // Add 'hidden' class to each playlist item
     this.playlistItems.forEach(item => {
       item.classList.add('hidden');
     });
   },
 
+  /**
+   * Creates a track object from a playlist item.
+   * @param {HTMLElement} item - The playlist item element.
+   * @returns {Object} - The created track object.
+   */
   createTrackFromPlaylistItem(item) {
     const type = item.getAttribute('data-type');
     const videoUrl = item.getAttribute('data-video');
@@ -176,6 +199,9 @@ const PlayerApp = {
     };
   },
 
+  /**
+   * Initializes event listeners for filter buttons and accordion button.
+   */
   initializeEventListeners() {
     const filterButtons = this.playlist.getElementsByClassName('filter-button');
     Array.from(filterButtons).forEach(button => {
@@ -191,27 +217,32 @@ const PlayerApp = {
     accordionButton.addEventListener('click', this.toggleAccordion);
   },
 
+  /**
+   * Initializes event listeners for the Plyr player.
+   */
   initializePlayerEventListeners() {
-         // Initialize the first playlist item
+
+    // begin player Ready Count
     var readyCount = 0;
 
+    // Get the currently playing track
     const playlistIcon = document.querySelector('.playlist-icon');
 
     var playlerText = document.querySelector('.player_container .player_text');
 
 
     this.player.on('ready', () => {
-      //this.player.play();
+      this.player.play();
 
     });
 
-    this.player.on('ready',() => {
-      if (readyCount == 0){
+    this.player.on('ready', () => {
+      if (readyCount == 0) {
         const firstPlaylistItem = this.playlistItems[0];
         const firstTrack = this.tracks[0];
         this.handlePlaylistItemClick(firstPlaylistItem, firstTrack);
         this.handlePlaylistItemClick(firstPlaylistItem, firstTrack);
-      } 
+      }
       readyCount++;
     });
 
@@ -232,20 +263,20 @@ const PlayerApp = {
     });
 
     this.player.on('progress', () => {
-      document.querySelector('.plyr__control.plyr__control--overlaid').classList.add('active');
+      document.querySelector('.player_container').classList.add('loading');
     });
 
     this.player.off('canplaythrough', () => {
-      
-      document.querySelector('.plyr__control.plyr__control--overlaid').classList.remove('active');
-    });
-    
-    this.player.off('canplay', () => {
-      document.querySelector('.plyr__control.plyr__control--overlaid').classList.remove('active');
-    });
-    
 
-    
+      document.querySelector('.player_container').classList.remove('loading');
+    });
+
+    this.player.off('canplay', () => {
+      document.querySelector('.player_container').classList.remove('loading');
+    });
+
+
+
     this.playlistItems.forEach(item => {
       item.addEventListener('click', () => {
         const index = this.playlistItems.indexOf(item);
@@ -266,6 +297,12 @@ const PlayerApp = {
       }
     });
   },
+
+  /**
+   * Creates a track object from a playlist item.
+   * @param {HTMLElement} item track - The playlist item element.
+   * @returns {Object} - The created track object.
+   */
   handlePlaylistItemClick(item, track) {
     this.playlistItems.forEach(item => {
       if (item.classList.contains('active')) {
@@ -273,19 +310,19 @@ const PlayerApp = {
         item.classList.add('watched');
       }
     });
-  
+
     item.classList.add('active');
-  
+
     // Get the text-title span element
     const textTitle = document.querySelector('.text_title');
     // Set the data-title attribute as the innerText of the playlist_item
-    textTitle.textContent=item.getAttribute('data-title');
-  
+    textTitle.textContent = item.getAttribute('data-title');
+
     // Get the player_text anchor element
     const playerText = document.querySelector('.player_text');
     // Set the href attribute as the data-pUrl attribute of the playlist_item
     playerText.setAttribute('href', item.getAttribute('data-pUrl'));
-  
+
     this.player.source = {
       type: 'video',
       title: track.title,
@@ -295,41 +332,44 @@ const PlayerApp = {
     this.player.play();
   },
 
+  /**
+   * Fetch Categories from plalsit items and add them to Accordian
+   */
   populateAccordionContent() {
     const accordionContent = document.querySelector('.accordion-content');
     accordionContent.innerHTML = ''; // Clear the content before populating
-  
+
     // Create <div> element for the "All" category
     const allDiv = document.createElement('div');
     allDiv.classList.add('filter-button');
     allDiv.setAttribute('data-category', 'All');
     allDiv.textContent = 'All';
-  
+
     accordionContent.appendChild(allDiv);
-  
+
     // Create <div> elements for each category
     const categories = new Set();
     this.playlistItems.forEach(item => {
       const category = item.getAttribute('data-category');
       if (category && category.trim() !== '') { // Check if category is not empty or null
         const categoryList = category.split(';');
-  
+
         categoryList.forEach(categoryItem => {
           const trimmedCategoryItem = categoryItem.trim();
           if (trimmedCategoryItem !== '' && !categories.has(trimmedCategoryItem)) { // Check if categoryItem is not empty and not already added
             categories.add(trimmedCategoryItem);
-  
+
             const div = document.createElement('div');
             div.classList.add('filter-button');
             div.setAttribute('data-category', trimmedCategoryItem);
             div.textContent = trimmedCategoryItem;
-  
+
             accordionContent.appendChild(div);
           }
         });
       }
     });
-  
+
     // Add click event listeners to the new filter buttons
     const filterButtons = accordionContent.getElementsByClassName('filter-button');
     Array.from(filterButtons).forEach(button => {
@@ -341,8 +381,11 @@ const PlayerApp = {
       });
     });
   },
-  
-  
+
+  /**
+   * Filters the playlist by the selected category.
+   * @param {string} category - The selected category.
+   */
   filterPlaylist(category) {
     // Remove "active" class from all playlist items
     this.playlistItems.forEach(item => {
@@ -377,22 +420,35 @@ const PlayerApp = {
     }
   },
 
+
+
   showAllPlaylistItems() {
     this.playlistItems.forEach(item => {
       item.classList.remove('hidden');
     });
   },
 
+  /**
+  * Toggles the accordion to show/hide the category list
+  */
   toggleAccordion() {
     const accordion = document.querySelector('.accordion');
     accordion.classList.toggle('active');
   },
 
+  /**
+   * Updates the text of the accordion button.
+   * @param {string} category - The selected category.
+   */
   updateAccordionButtonText(category) {
     const accordionButton = document.querySelector('.accordion-button');
     accordionButton.textContent = category;
   },
 
+
+  /**
+   * Initializes the playlist icon and sets up the click event listener.
+   */
   initializePlaylistIcon() {
     // Get playlist icon and columns
     const playlistIcon = document.querySelector('.playlist-icon');
@@ -406,6 +462,9 @@ const PlayerApp = {
     });
   },
 
+  /**
+   * Initializes the search functionality and sets up the input event listener.
+   */
   initializeSearch() {
     const searchInput = document.getElementById('searchInput');
     const playlistItems = this.playlist.getElementsByClassName('playlist_item');
@@ -418,18 +477,21 @@ const PlayerApp = {
         const director = item.querySelector('.item_director').textContent.toLowerCase();
 
         if (title.includes(searchString) || director.includes(searchString)) {
-          item.classList.remove('hidden'); 
+          item.classList.remove('hidden');
         } else {
-          item.classList.add('hidden'); 
+          item.classList.add('hidden');
         }
       });
     });
   },
-  
+
+  /**
+   * Plays the visible playlist item.
+   */
   playVisibleItem(direction) {
     const visibleItems = Array.from(this.playlist.querySelectorAll('.playlist_item:not(.hidden)[data-category]'));
     const activeVisibleItem = visibleItems.find(item => item.classList.contains('active'));
-   
+
 
     if (visibleItems.length > 0) {
       let visibleIndex;
@@ -454,6 +516,9 @@ const PlayerApp = {
     }
   },
 
+  /**
+   * Initializes the SimpleBar for the playlist.
+   */
   initialiseSimpleBar() {
 
     const simpleBar_1 = document.getElementById('playlist');
@@ -462,6 +527,10 @@ const PlayerApp = {
     new SimpleBar(simpleBar_2, { autoHide: true });
   },
 
+
+  /**
+   * Selects the first visible playlist item.
+   */
   selectFirstVisibleItem() {
     const activeItem = this.playlist.querySelector('.playlist_item.active');
     if (!activeItem) {
