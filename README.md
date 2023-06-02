@@ -16,10 +16,11 @@ This project is a web application that provides a user-friendly interface for a 
 - Handles Youtube, Vimeo, HTML5/MP4 Video files. 
 - Responsive design with a two-column layout
 - Collapsable playlist button
-- Interactive accordion and playlist sections
 - Watched item tracking in the playlist
 - Video player with playlist integration
+- Hides all vimeo/youtube embed controls/ recommended videos
 - Search functionality
+- Filtering by category functionality
 
 ## Dependencies
 
