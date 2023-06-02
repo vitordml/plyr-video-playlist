@@ -2,6 +2,11 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+[Demo]([https://plyr.io](https://plyr-video-playlist.dml0b3i.repl.co))
+
+[![Screenshot of Playlist](https://github.com/vitordml/plyr-video-playlist/blob/main/plyr-video-playlist-scrnsht.jpg)](https://plyr-video-playlist.dml0b3i.repl.co)
+
+
 ## Description
 
 This project is a web application that provides a user-friendly interface for a Playlist for the Plyr Media Player.
