@@ -64,11 +64,11 @@ This playlist requires Playlist Items to be added in the following format:
 </div>
 ```
 
-**data-title** / **data-author** atttributes are used to display the items information in the top left.
-**data-purl** handles any thumbnail image
-**data-video** handles the Youtube link, Vimeo ID or the html/mp4 video link
-**data-type** specified the media type, this is either youtube| vimeo | video
-**data-category** will be used to populate the **All** dropdown accordian menu in order to filter the playlist item. 
+- **data-title** / **data-author** atttributes are used to display the items information in the top left.
+- **data-purl** handles any thumbnail image
+- **data-video** handles the Youtube link, Vimeo ID or the html/mp4 video link
+- **data-type** specified the media type, this is either youtube| vimeo | video
+- **data-category** will be used to populate the **All** dropdown accordian menu in order to filter the playlist item. 
 
 The remaining dom elements are **NOT** automatically filled in based on the data-attributes on load and need to be added manually for now. 
 The playlist autoplays, and displays a buffering animation while the Plyr *progress* event is occuring.
