@@ -13,7 +13,7 @@ This project is a web application that provides a user-friendly interface for a 
 
 ## Features
 
-- Handles Youtube, Vimeo, HTML%/MP4 Video files. 
+- Handles Youtube, Vimeo, HTML5/MP4 Video files. 
 - Responsive design with a two-column layout
 - Collapsable playlist button
 - Interactive accordion and playlist sections
@@ -46,8 +46,34 @@ To get a local copy up and running, follow these simple steps:
 3. Open the `index.html` file in your preferred web browser.
 
 ## Usage
+This playlist requires Playlist Items to be added in the following format:
+```
+<div class="playlist_item" data-title="" data-author="" data-purl="" data-video="" data-type="" data-category="">
+   <div class="item_wrapper">
+     <div class="item_thumb_container">
+       <img class="item_thumb"
+         src="">
+       <div class="item_thumb_play"></div>
+       <div class="item_thumb_restart"></div>
+     </div>
+     <div class="item_details">
+       <span class="item_title"></span>
+       <span class="item_director"></span>
+     </div>
+   </div>
+</div>
+```
 
---
+**data-title** / **data-author** atttributes are used to display the items information in the top left.
+**data-purl** handles any thumbnail image
+**data-video** handles the Youtube link, Vimeo ID or the html/mp4 video link
+**data-type** specified the media type, this is either youtube| vimeo | video
+**data-category** will be used to populate the **All** dropdown accordian menu in order to filter the playlist item. 
+
+The remaining dom elements are **NOT** automatically filled in based on the data-attributes on load and need to be added manually for now. 
+
+The playlist autoplays, and displays a buffering animation while the Plyr *progress* event is occuring.
+
 
 ## Contributing
 
