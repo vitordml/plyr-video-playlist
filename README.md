@@ -71,7 +71,6 @@ This playlist requires Playlist Items to be added in the following format:
 **data-category** will be used to populate the **All** dropdown accordian menu in order to filter the playlist item. 
 
 The remaining dom elements are **NOT** automatically filled in based on the data-attributes on load and need to be added manually for now. 
-
 The playlist autoplays, and displays a buffering animation while the Plyr *progress* event is occuring.
 
 
