@@ -83,4 +83,7 @@ Contributions are welcome! If you have any ideas, enhancements, or bug fixes, pl
 
 This project is licensed under the [MIT License](LICENSE).
 
+## Credit
+I used the playlist code by [Skerbis](https://codepen.io/skibbi/pen/NWvLoRz) as a starting point
+
 
